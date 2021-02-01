@@ -26,7 +26,7 @@ pacman -S make texinfo bison git dejagnu
 ```
 如果后续编译报错，则根据报错信息安装相应的工具即可。
 
-这里我使用的是[此网站](https://sourceforge.net/projects/mingw-w64/files/)下载的gdb。
+这里我使用的是[此网站](https://sourceforge.net/projects/mingw-w64/files/)下载的gcc。
 
 # 开始编译
 1. 下载源码

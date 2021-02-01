@@ -17,6 +17,7 @@ category: Android
 /data/local/su
 ```
 https://github.com/lamster2018/EasyProtector
+https://www.coolapk.com/apk/io.github.vvb2060.mahoshojo
 
 # 代理
 
@@ -31,6 +32,7 @@ https://github.com/w568w/XposedDetectLib
 
 https://github.com/KagurazakaHanabi/XposedHider
 
+https://github.com/vvb2060/XposedDetector
 
 # Frida
 https://github.com/darvincisec/DetectFrida

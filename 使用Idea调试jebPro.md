@@ -1,7 +1,7 @@
 ---
 title: 使用Idea调试jebPro
 date: 2020-06-05 17:44:09
-tag: 调试jar包
+tag: JEB
 category: Android逆向
 ---
 
@@ -12,8 +12,8 @@ category: Android逆向
 
 <!-- TOC -->
 
-- [1. 前期准备](#1-前期准备)
-- [2. 开始调试](#2-开始调试)
+- [前期准备](#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87)
+- [开始调试](#%E5%BC%80%E5%A7%8B%E8%B0%83%E8%AF%95)
 
 <!-- /TOC -->
 

@@ -7,31 +7,31 @@ category: linux
 
 <!-- TOC -->
 
-- [1. Android studio 出现 grant current user access to /dev/kvm 以及/dev/kvm devices: permission denies](#1-android-studio-出现-grant-current-user-access-to-devkvm-以及devkvm-devices-permission-denies)
-- [2. Android studio 创建快捷方式](#2-android-studio-创建快捷方式)
-- [3. Ubuntu标题栏实时显示上下行网速、CPU及内存使用率](#3-ubuntu标题栏实时显示上下行网速cpu及内存使用率)
-- [4. 设置深度截图快捷方式](#4-设置深度截图快捷方式)
-- [5. 配置环境变量](#5-配置环境变量)
-  - [5.1. 路径写法](#51-路径写法)
-  - [5.2. 临时设置](#52-临时设置)
-  - [5.3. 当前用户的全局设置](#53-当前用户的全局设置)
-  - [5.4. 所有用户的全局设置](#54-所有用户的全局设置)
-- [6. adb devices 报错 no permissions (user in plugdev group; are your udev rules wrong?); see [http://developer.android.com/tools/device.html]](#6-adb-devices-报错-no-permissions-user-in-plugdev-group-are-your-udev-rules-wrong-see-httpdeveloperandroidcomtoolsdevicehtml)
-  - [6.1. lsusb 找到你手机的usb地址](#61-lsusb-找到你手机的usb地址)
-  - [6.2. 修改/etc/udev/rules.d/51-android.rules文件](#62-修改etcudevrulesd51-androidrules文件)
-  - [6.3. 执行下列命令](#63-执行下列命令)
-- [7. VIM普通用户保存文件时用sudo获取root权限](#7-vim普通用户保存文件时用sudo获取root权限)
-- [8. 安装nodejs](#8-安装nodejs)
-- [9. ubuntu安装Metasploit Framework](#9-ubuntu安装metasploit-framework)
-  - [9.1. 安装](#91-安装)
-- [10. 解决 Ubuntu 下 KeePass2 中文显示为方块的问题](#10-解决-ubuntu-下-keepass2-中文显示为方块的问题)
-  - [10.1. 安装keepass2](#101-安装keepass2)
-  - [10.2. 下载 KeePass2 语言包](#102-下载-keepass2-语言包)
-  - [10.3. 修改启动脚本](#103-修改启动脚本)
-  - [10.4. 修改系统字体设置](#104-修改系统字体设置)
-- [11. Ubuntu安装wireshark](#11-ubuntu安装wireshark)
-- [12. 安装 Albert](#12-安装-albert)
-- [13. ubuntu中添加和删除源](#13-ubuntu中添加和删除源)
+- [Android studio 出现 grant current user access to /dev/kvm 以及/dev/kvm devices: permission denies](#android-studio-%E5%87%BA%E7%8E%B0-grant-current-user-access-to-devkvm-%E4%BB%A5%E5%8F%8Adevkvm-devices-permission-denies)
+- [Android studio 创建快捷方式](#android-studio-%E5%88%9B%E5%BB%BA%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F)
+- [Ubuntu标题栏实时显示上下行网速、CPU及内存使用率](#ubuntu%E6%A0%87%E9%A2%98%E6%A0%8F%E5%AE%9E%E6%97%B6%E6%98%BE%E7%A4%BA%E4%B8%8A%E4%B8%8B%E8%A1%8C%E7%BD%91%E9%80%9Fcpu%E5%8F%8A%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E7%8E%87)
+- [设置深度截图快捷方式](#%E8%AE%BE%E7%BD%AE%E6%B7%B1%E5%BA%A6%E6%88%AA%E5%9B%BE%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F)
+- [配置环境变量](#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
+    - [路径写法](#%E8%B7%AF%E5%BE%84%E5%86%99%E6%B3%95)
+    - [临时设置](#%E4%B8%B4%E6%97%B6%E8%AE%BE%E7%BD%AE)
+    - [当前用户的全局设置](#%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE)
+    - [所有用户的全局设置](#%E6%89%80%E6%9C%89%E7%94%A8%E6%88%B7%E7%9A%84%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE)
+- [adb devices 报错 no permissions user in plugdev group; are your udev rules wrong?; see [http://developer.android.com/tools/device.html]](#adb-devices-%E6%8A%A5%E9%94%99-no-permissions-user-in-plugdev-group-are-your-udev-rules-wrong-see-httpdeveloperandroidcomtoolsdevicehtml)
+    - [lsusb 找到你手机的usb地址](#lsusb-%E6%89%BE%E5%88%B0%E4%BD%A0%E6%89%8B%E6%9C%BA%E7%9A%84usb%E5%9C%B0%E5%9D%80)
+    - [修改/etc/udev/rules.d/51-android.rules文件](#%E4%BF%AE%E6%94%B9etcudevrulesd51-androidrules%E6%96%87%E4%BB%B6)
+    - [执行下列命令](#%E6%89%A7%E8%A1%8C%E4%B8%8B%E5%88%97%E5%91%BD%E4%BB%A4)
+- [VIM普通用户保存文件时用sudo获取root权限](#vim%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E4%BF%9D%E5%AD%98%E6%96%87%E4%BB%B6%E6%97%B6%E7%94%A8sudo%E8%8E%B7%E5%8F%96root%E6%9D%83%E9%99%90)
+- [安装nodejs](#%E5%AE%89%E8%A3%85nodejs)
+- [ubuntu安装Metasploit Framework](#ubuntu%E5%AE%89%E8%A3%85metasploit-framework)
+    - [安装](#%E5%AE%89%E8%A3%85)
+- [解决 Ubuntu 下 KeePass2 中文显示为方块的问题](#%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B-keepass2-%E4%B8%AD%E6%96%87%E6%98%BE%E7%A4%BA%E4%B8%BA%E6%96%B9%E5%9D%97%E7%9A%84%E9%97%AE%E9%A2%98)
+    - [安装keepass2](#%E5%AE%89%E8%A3%85keepass2)
+    - [下载 KeePass2 语言包](#%E4%B8%8B%E8%BD%BD-keepass2-%E8%AF%AD%E8%A8%80%E5%8C%85)
+    - [修改启动脚本](#%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC)
+    - [修改系统字体设置](#%E4%BF%AE%E6%94%B9%E7%B3%BB%E7%BB%9F%E5%AD%97%E4%BD%93%E8%AE%BE%E7%BD%AE)
+- [Ubuntu安装wireshark](#ubuntu%E5%AE%89%E8%A3%85wireshark)
+- [安装 Albert](#%E5%AE%89%E8%A3%85-albert)
+- [ubuntu中添加和删除源](#ubuntu%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%92%8C%E5%88%A0%E9%99%A4%E6%BA%90)
 
 <!-- /TOC -->
 
@@ -61,7 +61,7 @@ linux中启动模拟器出现grant current user access to /dev/kvm错误
 # 2. Android studio 创建快捷方式
 打开`/usr/share/applications`目录，使用`sudo vim AndroidStudio.desktop`创建AndroidStudio的快捷方式，加入以下内容：
 ```
-AndroidStudio[Desktop Entry]
+[Desktop Entry]
 Name=Android Studio     #名称
 Comment=Android Dev     #注释
 StartupNotify=true
@@ -69,8 +69,6 @@ Terminal=false
 Type=Application
 Icon=/home/ckcat/DevelopTools/android-studio/bin/studio.png     #设置图标
 Exec=/home/ckcat/DevelopTools/android-studio/bin/studio.sh %F   #设置启动方式
-Exec=/home/ckcat/DevelopTools/android-studio/bin/studio.sh %F
-
 ```
 保存退出后，其图标将会出现在Applications中，将其复制到桌面即可创建桌面快捷方式。
 

@@ -100,28 +100,12 @@ sudo apt-get install openjdk-8-jdk
 
 ## 2. 安装编译所需要的包
 ```
-sudo apt-get install libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev g++-multilib 
-sudo apt-get install -y git flex bison gperf build-essential libncurses5-dev:i386 
-sudo apt-get install tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386 
-sudo apt-get install dpkg-dev libsdl1.2-dev libesd0-dev
-sudo apt-get install git-core gnupg flex bison gperf build-essential  
-sudo apt-get install zip curl zlib1g-dev gcc-multilib g++-multilib 
-sudo apt-get install libc6-dev-i386 
-sudo apt-get install lib32ncurses5-dev x11proto-core-dev libx11-dev 
-sudo apt-get install libgl1-mesa-dev libxml2-utils xsltproc unzip m4
-sudo apt-get install lib32z-dev ccache
-
+apt-get -y install git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
 ```
-> libesd0-dev包安装不上的解决方法：
-使用 `sudo vim /etc/apt/sources.list` 打开 `sources.list` 文件,在末尾添加下列内容：
-```
-deb http://kr.archive.ubuntu.com/ubuntu/ xenial main universe
-deb-src http://kr.archive.ubuntu.com/ubuntu/ xenial main universe
-```
-然后 `sudo apt update` ，最后安装 `sudo apt-get install dpkg-dev libsdl1.2-dev libesd0-dev` 。
+以上的依赖包在编译 `android-9.0.0_r36` 时测试没有问题，其中 `openjdk-8-jdk` 非必须。
 
 ## 3. 下载驱动
-根据手机型号和Android版本下载对应的驱动
+根据手机型号和 Android 版本下载对应的驱动
 ```
 https://developers.google.com/android/drivers
 ```

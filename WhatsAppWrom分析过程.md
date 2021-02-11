@@ -49,7 +49,7 @@ category: Android逆向
 
 ![](WhatsAppWrom分析过程/效果图.gif)
 
-[相关代码](https://github.com/CKCat/Blog/WhatsAppWrom分析过程/WhatsAppWrom)
+[相关代码](https://github.com/CKCat/Blog/tree/master/WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/WhatsAppWrom)
 
 
 不过今天搜索 `"android.car.EXTENSIONS"` 关键字，突然发现了[另一篇文章](https://stackoverflow.com/questions/46788600/automatic-reply-for-whatsapp-messages-approach)，该文章的实现代码和 WhatsAppWrom 相似度非常高，WhatsAppWrom 开发者参考了相关代码。

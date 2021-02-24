@@ -32,6 +32,7 @@ category: linux
 - [Ubuntu安装wireshark](#ubuntu%E5%AE%89%E8%A3%85wireshark)
 - [安装 Albert](#%E5%AE%89%E8%A3%85-albert)
 - [ubuntu中添加和删除源](#ubuntu%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%92%8C%E5%88%A0%E9%99%A4%E6%BA%90)
+- [其他](#%E5%85%B6%E4%BB%96)
 
 <!-- /TOC -->
 
@@ -466,3 +467,7 @@ sudo add-apt-repository -r ppa:eugenesan/java
 或者进入 `/etc/apt/sources.list.d` 目录，将相应 ppa 源的保存文件删除。
 
 
+# 其他
+
+[双显卡1050TI笔记本的Ubuntu18安装实记](https://voidchen.cn/1050TI%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%9A%84Ubuntu18%E5%AE%89%E8%A3%85%E5%AE%9E%E8%AE%B0/)
+[How to install the NVIDIA drivers on Ubuntu 18.04 Bionic Beaver Linux ](https://linuxconfig.org/how-to-install-the-nvidia-drivers-on-ubuntu-18-04-bionic-beaver-linux) 

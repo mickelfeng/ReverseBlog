@@ -153,11 +153,11 @@ void soinfo::call_function(const char* function_name __unused,
 
 调试应用和代码：
 
-[送给最好的TA]()
+[送给最好的TA](https://github.com/CKCat/Blog/blob/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/%E9%80%81%E7%BB%99%E6%9C%80%E5%A5%BD%E7%9A%84TA.apk)
 
-[unluac_2015_06_13.jar]()
+[unluac_2015_06_13.jar](https://github.com/CKCat/Blog/blob/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/unluac_2015_06_13.jar)
 
-[init_proc相关代码]()
+[init_proc相关代码](https://github.com/CKCat/Blog/tree/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/ndkcode)
 
 
 参考：

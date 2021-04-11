@@ -7,15 +7,6 @@ category: Android源码
 
 最近有点时间就尝试着移植 FART 到 Android 9.0 ，本文记录一下的整个过程。
 
-<!-- TOC -->
-
-- [获取 cloassloader 执行主动调用](#获取-cloassloader-执行主动调用)
-- [添加 dumpMethodCode 方法](#添加-dumpmethodcode-方法)
-- [添加 myfartInvoke 方法](#添加-myfartinvoke-方法)
-- [执行时 dumpDexFile](#执行时-dumpdexfile)
-
-<!-- /TOC -->
-
 # 获取 cloassloader 执行主动调用
 首先修改 `frameworks/base/core/java/android/app/ActivityThread.java` 文件，添加以下内容。其中主要思想就是获取 apk 的 classloader 然后通过反射获取 dumpMethodCode 方法，执行主动调用，下面添加 dumpMethodCode 方法。
 

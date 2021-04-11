@@ -9,26 +9,7 @@ category: Android源码
 > 系统环境：Ubuntu 18.04.3
 > 
 > 编译Android系统版本： 8.1
-<!-- TOC -->
 
-- [一、下载源码](#%E4%B8%80%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81)
-    - [下载repo工具](#%E4%B8%8B%E8%BD%BDrepo%E5%B7%A5%E5%85%B7)
-    - [下载Android源码](#%E4%B8%8B%E8%BD%BDandroid%E6%BA%90%E7%A0%81)
-    - [android源码查看所有分支切换分支](#android%E6%BA%90%E7%A0%81%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E5%88%86%E6%94%AF%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF)
-- [二、配置编译环境](#%E4%BA%8C%E9%85%8D%E7%BD%AE%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83)
-    - [安装 JDK](#%E5%AE%89%E8%A3%85-jdk)
-    - [安装编译所需要的包](#%E5%AE%89%E8%A3%85%E7%BC%96%E8%AF%91%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E5%8C%85)
-    - [下载驱动](#%E4%B8%8B%E8%BD%BD%E9%A9%B1%E5%8A%A8)
-    - [编译](#%E7%BC%96%E8%AF%91)
-    - [刷机](#%E5%88%B7%E6%9C%BA)
-- [三、编译内核并刷机](#%E4%B8%89%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E5%B9%B6%E5%88%B7%E6%9C%BA)
-    - [获取内核源码](#%E8%8E%B7%E5%8F%96%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81)
-    - [编译](#%E7%BC%96%E8%AF%91)
-- [四、错误处理](#%E5%9B%9B%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86)
-    - [flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt < sizeof _nl_value_type_LC_TIME / sizeof _nl_value_type_LC_TIME[0]' failed. 错误。](#flex-2539-loadlocalec130-_nl_intern_locale_data-assertioncnt--sizeof-_nl_value_type_lc_time--sizeof-_nl_value_type_lc_time0-failed-%E9%94%99%E8%AF%AF)
-    - [adb和fastboot都没有权限](#adb%E5%92%8Cfastboot%E9%83%BD%E6%B2%A1%E6%9C%89%E6%9D%83%E9%99%90)
-
-<!-- /TOC -->
 
 # 一、下载源码
 由于国内网络环境问题，下列下载源码方式均未采用google官方提供的方式。
@@ -264,4 +245,21 @@ LC_ALL=C 是为了去除所有本地化的设置，让命令能正确执行。
 
 ## 2. adb和fastboot都没有权限
 
-> 可以参考https://github.com/snowdream/51-android
+> 可以参考 https://github.com/snowdream/51-android
+
+# 其他
+
+编译亲儿子内核时简单几步让版本信息和官方镜像一致，而不是显示  `-dirty` 。
+
+```bash
+adb shell cat /proc/version
+
+export KBUILD_BUILD_VERSION=1
+export KBUILD_BUILD_USER=android-build
+export KBUILD_BUILD_HOST=xxx.google.com
+export KBUILD_BUILD_TIMESTAMP="Web Feb 13 19:10:11 UTC 2019"
+sed -i "s/#define LINUX_COMPILER/#define LINUX_COMPILER "'\\"gcc version xxx-google xxx \\(prerelease\\) \\(GCC\\) \\" # /' scripts/mkcompile_h
+make xxx_defconfig
+make -j7 KERNELRELEASE="xxx"
+```
+

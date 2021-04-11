@@ -5,29 +5,6 @@ tags: 汇编
 category: ARMv8汇编
 ---
 
-<!-- TOC -->
-
-- [基本知识](#基本知识)
-    - [ARMv8寄存器](#armv8寄存器)
-        - [AArch64通用寄存器](#aarch64通用寄存器)
-        - [状态寄存器(SPSR)](#状态寄存器spsr)
-    - [条件码](#条件码)
-- [指令](#指令)
-    - [数据处理指令](#数据处理指令)
-        - [算术和逻辑运算](#算术和逻辑运算)
-        - [乘法和除法指令](#乘法和除法指令)
-        - [移位操作](#移位操作)
-        - [位和字节操作指令](#位和字节操作指令)
-        - [条件执行](#条件执行)
-    - [内存访问指令](#内存访问指令)
-        - [加载和存储指令](#加载和存储指令)
-        - [寻址模式](#寻址模式)
-    - [流程控制指令](#流程控制指令)
-    - [System](#system)
-- [参考](#参考)
-
-<!-- /TOC -->
-
 前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令
 
 # 基本知识
@@ -61,28 +38,29 @@ AArch64通用寄存器共31个 `X0-X30` , 其中各寄存器的作用如下表�
 ![](ARMv8学习记录二/2020-03-09-16-00-41.png)
 
 
-## 条件码
+### 条件码
+此处的条件码对应的上面状态寄存器对应的标志位。
 
 | Code | Encoding | Meaning (when set by CMP)                            | Meaning (when set by FCMP)                              | Condition flags      |
 | ---- | -------- | ---------------------------------------------------- | ------------------------------------------------------- | -------------------- |
-| `EQ`   | 0b0000   | Equal to.                                            | Equal to.                                               | `Z = 1`                 |
-| `NE`   | 0b0001   | Not equal to.                                        | Unordered, or not equal to.                             | `Z = 0`                |
-| `CS`   | 0b0010   | Carry set (identical to HS).                         | Greater than, equal to, or unordered (identical to HS). | `C = 1`                |
-| `HS`   | 0b0010   | Greater than, equal to (unsigned) (identical to CS). | Greater than, equal to, or unordered (identical to CS). | `C = 1`                |
-| `CC`   | 0b0011   | Carry clear (identical to LO).                       | Less than (identical to LO).                            | `C = 0`                |
-| `LO`   | 0b0011   | Unsigned less than (identical to CC).                | Less than (identical to CC).                            | `C = 0`                |
-| `MI`   | 0b0100   | Minus, Negative.                                     | Less than.                                              | `N = 1`                |
-| `PL`   | 0b0101   | Positive or zero.                                    | Greater than, equal to, or unordered.                   | `N = 0`                |
-| `VS`   | 0b0110   | Signed overflow.                                     | Unordered. (At least one argument was NaN).             | `V = 1`                |
-| `VC`   | 0b0111   | No signed overflow.                                  | Not unordered. (No argument was NaN).                   | `V = 0`                |
-| `HI`   | 0b1000   | Greater than (unsigned).                             | Greater than or unordered.                              | `(C = 1) && (Z = 0)`   |
-| `LS`   | 0b1001   | Less than or equal to (unsigned).                    | Less than or equal to.                                  | `(C = 0) || (Z = 1)` |
-| `GE`   | 0b1010   | Greater than or equal to (signed).                   | Greater than or equal to.                               | `N==V`                 |
-| `LT`   | 0b1011   | Less than (signed).                                  | Less than or unordered.                                 | `N!=V`                 |
-| `GT`   | 0b1100   | Greater than (signed).                               | Greater than.                                           | `(Z==0) && (N==V)`     |
-| `LE`   | 0b1101   | Less than or equal to (signed).                      | Less than, equal to or unordered.                       | `(Z==1) || (N!=V)`   |
-| `AL`   | 0b1110   | Always executed.                                     | Default. Always executed.                               | `Any`                  |
-| `NV`   | 0b1111   | Always executed.                                     | Always executed.                                        | `Any`                  |
+| `EQ`   | 0000   | Equal to.                                            | Equal to.                                               | `Z = 1`                 |
+| `NE`   | 0001   | Not equal to.                                        | Unordered, or not equal to.                             | `Z = 0`                |
+| `CS`   | 0010   | Carry set (identical to HS).                         | Greater than, equal to, or unordered (identical to HS). | `C = 1`                |
+| `HS`   | 0010   | Greater than, equal to (unsigned) (identical to CS). | Greater than, equal to, or unordered (identical to CS). | `C = 1`                |
+| `CC`   | 0011   | Carry clear (identical to LO).                       | Less than (identical to LO).                            | `C = 0`                |
+| `LO`   | 0011   | Unsigned less than (identical to CC).                | Less than (identical to CC).                            | `C = 0`                |
+| `MI`   | 0100   | Minus, Negative.                                     | Less than.                                              | `N = 1`                |
+| `PL`   | 0101   | Positive or zero.                                    | Greater than, equal to, or unordered.                   | `N = 0`                |
+| `VS`   | 0110   | Signed overflow.                                     | Unordered. (At least one argument was NaN).             | `V = 1`                |
+| `VC`   | 0111   | No signed overflow.                                  | Not unordered. (No argument was NaN).                   | `V = 0`                |
+| `HI`   | 1000   | Greater than (unsigned).                             | Greater than or unordered.                              | `(C = 1) && (Z = 0)`   |
+| `LS`   | 1001   | Less than or equal to (unsigned).                    | Less than or equal to.                                  | `(C = 0) \|\| (Z = 1)` |
+| `GE`   | 1010   | Greater than or equal to (signed).                   | Greater than or equal to.                               | `N==V`                 |
+| `LT`   | 1011   | Less than (signed).                                  | Less than or unordered.                                 | `N!=V`                 |
+| `GT`   | 1100   | Greater than (signed).                               | Greater than.                                           | `(Z==0) && (N==V)`     |
+| `LE`   | 1101   | Less than or equal to (signed).                      | Less than, equal to or unordered.                       | `(Z==1) \|\| (N!=V)`   |
+| `AL`   | 1110   | Always executed.                                     | Default. Always executed.                               | `Any`                  |
+| `NV`   | 1111   | Always executed.                                     | Always executed.                                        | `Any`                  |
 
 
 # 指令
@@ -242,12 +220,12 @@ CSEL w1, w1, w2, EQ  // select between the two results
 ### 加载和存储指令
 | Mnemonic                | Operands                                    | Instruction                                                                                                                                                                                                                                     |
 | ----------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `LDR(B|H|SB|SH|SW)` | `Wt, [Xn|SP], #simm`                       | Load Register (immediate) loads a word or doubleword from memory and writes it to a register. The address that is used for the load is calculated from a base register and an immediate offset.                                                 |
-| `LD(B|H|SB|SH|SW)`  | `Wt, [Xn|SP, (Wm|Xm){, extend {amount}}]` | Load Register (register) calculates an address from a base register value and an offset register value, loads a byte/half-word/word from memory, and writes it to a register. The offset register value can optionally be shifted and extended. |
-| `STR(B|H|SB|SH|SW)` | `Wt, [Xn|SP], #simm`                       | Store Register (immediate) stores a word or a doubleword from a register to memory. The address that is used for the store is calculated from a base register and an immediate offset.                                                          |
-| `STR(B|H|SB|SH|SW)` | `Wt, [Xn|SP, (Wm|Xm){, extend {amount}}]` | Store Register (immediate) stores a word or a doubleword from a register to memory. The address that is used for the store is calculated from a base register and an immediate offset.                                                          |
-| `LDP`                   | `Wt1, Wt2, [Xn|SP], #imm`                  | Load Pair of Registers calculates an address from a base register value and an immediate offset, loads two 32-bit words or two 64-bit doublewords from memory, and writes them to two registers.                                                |
-| `STP`                   | `Wt1, Wt2, [Xn|SP], #imm`                  | Store Pair of Registers calculates an address from a base register value and an immediate offset, and stores two 32-bit words or two 64-bit doublewords to the calculated address, from two registers                                           |
+| `LDR(B\|H\|SB\|SH\|SW)` | `Wt, [Xn\|SP], #simm`                       | Load Register (immediate) loads a word or doubleword from memory and writes it to a register. The address that is used for the load is calculated from a base register and an immediate offset.                                                 |
+| `LD(B\|H\|SB\|SH\|SW)`  | `Wt, [Xn\|SP, (Wm\|Xm){, extend {amount}}]` | Load Register (register) calculates an address from a base register value and an offset register value, loads a byte/half-word/word from memory, and writes it to a register. The offset register value can optionally be shifted and extended. |
+| `STR(B\|H\|SB\|SH\|SW)` | `Wt, [Xn\|SP], #simm`                       | Store Register (immediate) stores a word or a doubleword from a register to memory. The address that is used for the store is calculated from a base register and an immediate offset.                                                          |
+| `STR(B\|H\|SB\|SH\|SW)` | `Wt, [Xn\|SP, (Wm\|Xm){, extend {amount}}]` | Store Register (immediate) stores a word or a doubleword from a register to memory. The address that is used for the store is calculated from a base register and an immediate offset.                                                          |
+| `LDP`                   | `Wt1, Wt2, [Xn\|SP], #imm`                  | Load Pair of Registers calculates an address from a base register value and an immediate offset, loads two 32-bit words or two 64-bit doublewords from memory, and writes them to two registers.                                                |
+| `STP`                   | `Wt1, Wt2, [Xn\|SP], #imm`                  | Store Pair of Registers calculates an address from a base register value and an immediate offset, and stores two 32-bit words or two 64-bit doublewords to the calculated address, from two registers                                           |
 
 ```
 // load a byte from x1
@@ -273,7 +251,7 @@ ldr     w0, =0x12345678
 | Addressing Mode                | Immediate       | Register                | Extended Register              |
 | ------------------------------ | --------------- | ----------------------- | ------------------------------ |
 | Base register only (no offset) | `[base{, 0}]`   |                         |                                |
-| Base plus offset               | `[base{, imm}]` | `[base, Xm{, LSL imm}]` | `[base, Wm, (S|U)XTW {#imm}]` |
+| Base plus offset               | `[base{, imm}]` | `[base, Xm{, LSL imm}]` | `[base, Wm, (S\|U)XTW \{ #imm }]` |
 | Pre-indexed                    | `[base, imm]!`  |                         |                                |
 | Post-indexed                   | `[base], imm`   | `[base], Xm a`          |                                |
 | Literal (PC-relative)          | `label`         |                         |                                |
@@ -361,6 +339,11 @@ adrp   x0, label
 | `MRS`      | Move System Register allows the PE to read an AArch64 System register into a general-purpose register.                                                |
 | `SVC`      | Supervisor Call causes an exception to be taken to EL1.                                                                                               |
 | `NOP`      | No Operation does nothing, other than advance the value of the program counter by 4. This instruction can be used for instruction alignment purposes. |
+
+# 指令记录
+本节主要记录一些自已不知道其含义的指令，后续通过查询资料后才弄懂的指令，由于比较容易忘记，故记录下来。
+
+
 
 # 参考
 [A Guide to ARM64 / AArch64 Assembly on Linux with Shellcodes and Cryptography](https://modexp.wordpress.com/2018/10/30/arm64-assembly/)

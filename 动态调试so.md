@@ -5,6 +5,12 @@ tag: Android
 category: Android逆向
 ---
 
+> 如果手机系统是 android 10，那么需要设置一下
+```bash
+export IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so
+or export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so
+```
+参考：https://bbs.pediy.com/thread-258103.htm
 
 # 动态调试送给最好的TA
 

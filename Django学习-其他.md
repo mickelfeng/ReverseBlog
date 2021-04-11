@@ -444,7 +444,7 @@ class AreaAdmin(admin.ModelAdmin):
 
 2）在浏览器中刷新效果如下图：
 
-![]Django学习-其他/2020-01-15-17-56-07.png)
+![](Django学习-其他/2020-01-15-17-56-07.png)
 
 ### 搜索框
 

@@ -36,3 +36,41 @@ git revert HEAD~n        # 撤销前n次 commit 。
 git revert commit-id     # 撤销指定的版本，撤销也会作为一次提交进行保存。
 git reset HEAD^ file     # 回退 flie 这个文件的版本到上一个版本
 ```
+
+## 解决 Git 更新本地冲突：commit your changes or stash them before you can merge
+
+方法一：stash
+```bash
+git stash               让工作区内容保证与上一次提交内容相同，同时备份当前修改的内容
+git pull                 拉取仓库的最新内容
+git stash pop       在仓库最新内容的基础上添加当前修改的内容
+```
+
+
+方法二：直接完全覆盖本地修改
+```bash
+git reset --hard
+git pull
+```
+
+# 如何清洗 Github 提交历史
+当 Github 的 Repo 变得日益臃肿、或者上传了敏感内容时，常见的方法时清理相关文件的所有历史提交记录：
+```bash
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch ${FILEPATH}' --prune-empty --tag-name-filter cat -- --all 
+git push origin master --force 
+rm -rf .git/refs/original/ 
+git reflog expire --expire=now --all 
+git gc --prune=now 
+git gc --aggressive --prune=now
+```
+但若这类文件非常多的时候，一个可选的方法时直接清空所有历史记录：
+```bash
+rm -rf .git 
+git init git 
+add -A 
+git commit -m "clear history" 
+git remote add origin ${GITHUB_REPO_URL} 
+git push -f -u origin master
+```
+参考链接: https://exp-blog.com/scm/qing-xi-github-ti-jiao-li-shi/
+

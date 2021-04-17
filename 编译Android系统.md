@@ -263,3 +263,6 @@ make xxx_defconfig
 make -j7 KERNELRELEASE="xxx"
 ```
 
+修改了 AOSP 源码之后，比如加了文件，哪怕在一个文件夹下，AS 开发时可以正常引用并使用里面的函数，但是编译时就是报找不到，此时要修改这个文件，将添加的文件包括进去。然后运行一次 `make update-api`。最后再 `m` 编译。
+
+

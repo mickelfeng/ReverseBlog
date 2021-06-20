@@ -32,6 +32,8 @@ category: linux
 - [Ubuntu安装wireshark](#ubuntu%E5%AE%89%E8%A3%85wireshark)
 - [安装 Albert](#%E5%AE%89%E8%A3%85-albert)
 - [ubuntu中添加和删除源](#ubuntu%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%92%8C%E5%88%A0%E9%99%A4%E6%BA%90)
+- [vmware装的ubuntu 18.04,后安装vm tools复制粘贴失效解决办法。](#vmware%E8%A3%85%E7%9A%84ubuntu-1804%E5%90%8E%E5%AE%89%E8%A3%85vm-tools%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E5%A4%B1%E6%95%88%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95)
+- [试用 010Editor 、 Beyond Compare 4 、Source Insight4.0](#%E8%AF%95%E7%94%A8-010editor--beyond-compare-4-source-insight40)
 - [其他](#%E5%85%B6%E4%BB%96)
 
 <!-- /TOC -->
@@ -467,6 +469,17 @@ sudo add-apt-repository -r ppa:eugenesan/java
 或者进入 `/etc/apt/sources.list.d` 目录，将相应 ppa 源的保存文件删除。
 
 
+# 14 vmware装的ubuntu 18.04,后安装vm tools复制粘贴失效解决办法。
+```bash
+apt install -y open-vm-tools open-vm-tools-desktop
+reboot
+```
+# 试用 010Editor 、 Beyond Compare 4 、Source Insight4.0
+```bash
+rm ~/.config/SweetScape/010\ Editor.ini
+rm ~/.config/bcompare/registry.dat
+rm ~/.wine/drive_c/ProgramData/Source\ Insight/4.0/si4.lic
+```
 # 其他
 
 [双显卡1050TI笔记本的Ubuntu18安装实记](https://voidchen.cn/1050TI%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%9A%84Ubuntu18%E5%AE%89%E8%A3%85%E5%AE%9E%E8%AE%B0/)

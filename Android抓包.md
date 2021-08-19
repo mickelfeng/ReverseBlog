@@ -21,9 +21,19 @@ category: Android
 
 4. 安装证书
 
-手机端访问 chls.pro/ssl 下载证书并安装。其中可以通过 Magisk 插件 move Certificates 将证书从用户证书移动到系统证书。后续即可进行抓包了。
+手机端访问 chls.pro/ssl 下载证书并安装。其中可以通过 Magisk 插件 move Certificates ()将证书从用户证书移动到系统证书。后续即可进行抓包了。
 
 > brup 配置好代理后，下载证书地址 http://burp 。
+
+手动将用户证书移动到系统证书。
+```bash
+# 挂载根目录，正常情况下，使其可读写
+mount -o rw, remount /
+# 将用户证书移入系统证书目录
+mv -f /data/misc/user/0/cacerts-added/123abc456.0 /system/etc/security/cacerts
+# 重新挂载根目录，使其为只读
+mount -o ro, remount /
+```
 
 # VPN 配合 Charles 抓包
 

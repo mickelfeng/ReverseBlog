@@ -1,7 +1,7 @@
 ---
 title: frida环境配置
 date: 2020-01-19 16:10:09
-tags: radare2 frida
+tags: frida
 category: frida
 ---
 

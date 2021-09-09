@@ -22,6 +22,7 @@ $ ./sys/user.sh
 PATH=/home/ckcat/bin:$PATH
 ```
 配置好之后，执行 `source .zshrc` 命令,然后执行 `r2` 命令，显示如下则表示安装成功。
+
 ![](r2Frida环境配置及使用/2019-12-22-00-06-27.png)
 
 
@@ -36,5 +37,6 @@ $ sudo apt install -y make gcc libzip-dev nodejs npm curl pkg-config git
 $ r2pm -ci r2frida
 ```
 如果出现 `$R2PM_DBDIR: No such file or directory.` 错误，运行 `r2pm init` 初始化一下。
+
 ![](r2Frida环境配置及使用/2019-12-22-00-14-37.png)
 

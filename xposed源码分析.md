@@ -7,31 +7,31 @@ category: Android逆向
 
 <!-- TOC -->
 
-- [Xposed源码剖析——概述](#xposed源码剖析概述)
-  - [XposedInstaller的构成](#xposedinstaller的构成)
-  - [Xposed原理](#xposed原理)
-  - [Xposed的实现方案](#xposed的实现方案)
-- [Xposed源码剖析——app_process作用详解](#xposed源码剖析app_process作用详解)
-  - [app_main.cpp 源码阅读与对比](#app_maincpp-源码阅读与对比)
-  - [XposedBridge.java](#xposedbridgejava)
-- [Xposed源码剖析——Xposed初始化](#xposed源码剖析xposed初始化)
-  - [xposed::initialize初始化](#xposedinitialize初始化)
-  - [onVmCreated 初始化后的准备工作](#onvmcreated-初始化后的准备工作)
-  - [libxposed_dalvik.cpp hook环境初始化](#libxposed_dalvikcpp-hook环境初始化)
-  - [JNI方法注册逻辑](#jni方法注册逻辑)
-- [Xposed源码剖析——hook具体实现](#xposed源码剖析hook具体实现)
+- [Xposed源码剖析——概述](#xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0)
+    - [XposedInstaller的构成](#xposedinstaller%E7%9A%84%E6%9E%84%E6%88%90)
+    - [Xposed原理](#xposed%E5%8E%9F%E7%90%86)
+    - [Xposed的实现方案](#xposed%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88)
+- [Xposed 源码剖析 —— app_process 作用详解](#xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90--app_process-%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3)
+    - [app_main.cpp 源码阅读与对比](#app_maincpp-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%AF%B9%E6%AF%94)
+    - [XposedBridge.java](#xposedbridgejava)
+- [Xposed源码剖析——Xposed初始化](#xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90xposed%E5%88%9D%E5%A7%8B%E5%8C%96)
+    - [xposed::initialize初始化](#xposedinitialize%E5%88%9D%E5%A7%8B%E5%8C%96)
+    - [onVmCreated 初始化后的准备工作](#onvmcreated-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8E%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C)
+    - [libxposed_dalvik.cpp hook 环境初始化](#libxposed_dalvikcpp-hook-%E7%8E%AF%E5%A2%83%E5%88%9D%E5%A7%8B%E5%8C%96)
+    - [JNI方法注册逻辑](#jni%E6%96%B9%E6%B3%95%E6%B3%A8%E5%86%8C%E9%80%BB%E8%BE%91)
+- [Xposed 源码剖析—— hook 具体实现](#xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-hook-%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0)
 
 <!-- /TOC -->
 
 # Xposed源码剖析——概述
 
-XPosed是与Cydia其名的工具，它能够让Android设备在没有修改源码的情况下修改系统中的API运行结果。我们通常称之为：God Mode（上帝模式）。
+XPosed 是与 Cydia 其名的工具，它能够让 Android 设备在没有修改源码的情况下修改系统中的 API 运行结果。我们通常称之为：God Mode（上帝模式）。
 
-之前享大家分享了Xposed的基础，Xposed的作用和最简单的用法。那么，它的原理和它的内部构造是如何构成的？下面，我们从Github上看看，rovo89大神是如何制作的。
+之前享大家分享了 Xposed 的基础，Xposed 的作用和最简单的用法。那么，它的原理和它的内部构造是如何构成的？下面，我们从 Github 上看看，rovo89 大神是如何制作的。
 
 rovo89的github地址：https://github.com/rovo89
 
-在主页上我们看到了，xposed其实主要是由三个项目来组成的，如下图所示；
+在主页上我们看到了，xposed 其实主要是由三个项目来组成的，如下图所示；
 
 ![](xposed源码分析/2020-02-12-01-17-48.png)
 
@@ -39,19 +39,19 @@ rovo89的github地址：https://github.com/rovo89
 
 | 项目            | 说明                                                                          |
 | --------------- | ----------------------------------------------------------------------------- |
-| Xposed          | Xposed框架的native部分（主要是改性app_process二进制文件）                     |
-| XposedInstaller | Xposed框架的Android端本地管理，环境架构搭建，以及第三方module资源下载的工具。 |
-| XposedBridge    | Xposed向开发者提供的API与相应的工具类库                                       |
+| Xposed          | Xposed 框架的 native 部分（主要是改性 app_process 二进制文件）                     |
+| XposedInstaller | Xposed 框架的 Android 端本地管理，环境架构搭建，以及第三方 module 资源下载的工具。 |
+| XposedBridge    | Xposed 向开发者提供的 API 与相应的工具类库                                       |
 
 ## XposedInstaller的构成
-Xposed项目使我们最常用的项目，当然，他也是构造Xposed的核心部分。（也许你会说，其实是xposed项目更重要，它主要是替换app_process，ok我们后面再说它）。
+Xposed 项目使我们最常用的项目，当然，他也是构造 Xposed 的核心部分。
 
-如下图所示，是我们在XPosedInstaller apk中见到的，安装xposed框架的界面。
+如下图所示，是我们在 XPosedInstaller apk 中见到的，安装 xposed 框架的界面。
 
 ![](xposed源码分析/2020-02-12-01-19-33.png)
 
-InstallerFragment我们能够在其中找到install方法，其中主要就是针对使用不同方式的将自定义的app_process文件替换掉系统的app_process文件。
-```
+InstallerFragment 我们能够在其中找到 install 方法，其中主要就是针对使用不同方式的将自定义的 app_process 文件替换掉系统的 app_process 文件。
+```java
     /**
      * xposed install
      * @return 安装成功返回true，否则false
@@ -179,11 +179,11 @@ InstallerFragment我们能够在其中找到install方法，其中主要就是�
         }
     }
 ```
-ok，我们看完了代码，发现所有的工作都是为了app_process文件的替换。那么，系统中这个app_process是做什么的？为什么我们需要替换？替换成什么样？替换后对于我们么来说有什么帮助呢？
+我们看完了代码，发现所有的工作都是为了 app_process 文件的替换。那么，系统中这个 app_process 是做什么的？为什么我们需要替换？替换成什么样？替换后对于我们么来说有什么帮助呢？
 
 ## Xposed原理
-我们在android的源码中的init.rc文件可以看到
-```
+我们在 android 的源码中的 `init.rc` 文件可以看到
+```bash
 service zygote /system/bin/app_process -Xzygote /system/bin –zygote –start-system-server
 socket zygote stream 666 
 onrestart write /sys/android_power/request_state wake
@@ -191,57 +191,60 @@ onrestart write /sys/power/state on
 onrestart restart media
 onrestart restart netd
 ```
-app_process是andriod app的启动程序（具体形式是zygote fork()调用一个 app_process作为Android app的载体）
+app_process 是 andriod app 的启动程序（具体形式是 zygote `fork()` 调用一个  app_process 作为 Android app 的载体）。
 
 ## Xposed的实现方案
 
-针对Hook的不同进程来说又可以分为全局Hook与单个应用程序进程Hook，我们知道在Android系统中，应用程序进程都是由Zygote进程孵化出来的，而Zygote进程是由Init进程启动的。
+针对 Hook 的不同进程来说又可以分为全局 Hook 与单个应用程序进程 Hook ，我们知道在 Android 系统中，应用程序进程都是由 Zygote 进程孵化出来的，而 Zygote 进程是由 Init 进程启动的。
 
-Zygote进程在启动时会创建一个Dalvik虚拟机实例，每当它孵化一个新的应用程序进程时，都会将这个Dalvik虚拟机实例复制到新的应用程序进程里面去，从而使得每一个应用程序进程都有一个独立的Dalvik虚拟机实例。所以如果选择对Zygote进程Hook，则能够达到针对系统上所有的应用程序进程Hook，即一个全局Hook。如下图所示：
+Zygote 进程在启动时会创建一个 Dalvik 虚拟机实例，每当它孵化一个新的应用程序进程时，都会将这个 Dalvik 虚拟机实例复制到新的应用程序进程里面去，从而使得每一个应用程序进程都有一个独立的 Dalvik 虚拟机实例。所以如果选择对 Zygote 进程 Hook ，则能够达到针对系统上所有的应用程序进程 Hook ，即一个全局 Hook 。如下图所示：
 
-![](xposed源码分析/2020-02-12-01-21-15.png)
+![](xposed源码分析/2021-09-03-14-36-00.png)
 
-# Xposed源码剖析——app_process作用详解
 
-上面我们分析Xposed项目的源码，从XposedInstaller开始说明了Xposed安装的原理与过程。我们知道，XposedInstaller主要的工作就是：
+# Xposed 源码剖析 —— app_process 作用详解
 
-* 替换系统的app_process（当然，这个操作需要Root权限）
-* 将xposed的api文件，XposedBridge.jar文件放置到私有目录中
+上面我们分析 Xposed 项目的源码，从 XposedInstaller 开始说明了 Xposed 安装的原理与过程。我们知道，XposedInstaller 主要的工作就是：
 
-至于为什么要替换app_process文件？
-系统中的app_process文件有什么作用？
-替换后的app_process为什么能够帮助我们hook？
+* 替换系统的 app_process（当然，这个操作需要 Root 权限）
+* 将 xposed 的 api 文件，`XposedBridge.jar` 文件放置到私有目录中
 
-下面我们就开始看看，rovo89大神的xposed开源项目。从GitHub上面clone下来xposed项目，我们在目录中看到其目录结构，如下所示：
+至于为什么要替换 app_process 文件？
+
+系统中的 app_process 文件有什么作用？
+
+替换后的 app_process 为什么能够帮助我们hook？
+
+
+下面我们就开始看看， rovo89 大神的 xposed 开源项目。从 GitHub 上面 clone 下来 xposed 项目，我们在目录中看到其目录结构，如下所示：
 
 ![](xposed源码分析/2020-02-12-01-22-42.png)
 
-从目录中，我们能够清楚的了解到，其中xposed项目现在已经支持Dalvik虚拟机与art虚拟机的架构了。
+从目录中，我们能够清楚的了解到，其中 xposed 项目现在已经支持 Dalvik 虚拟机与 art 虚拟机的架构了。
 
-## app_main.cpp 源码阅读与对比
-ok这里，我们先从app_process的源码开始阅读，打开app_main.cpp文件，估计大家和我一下，一时间也看不出来xposed针对源码修改了一些什么。
+## `app_main.cpp` 源码阅读与对比
+我们先从 app_process 的源码开始阅读，打开 `app_main.cpp` 文件，估计大家和我一下，一时间也看不出来 xposed 针对源码修改了一些什么。
 
-那么，我们就直接拿源码与xposed中的app_main.cpp进行对比。
+那么，我们就直接拿源码与 xposed 中的 `app_main.cpp` 进行对比。
 
-源码地址：/frameworks/base/cmds/app_process/app_main.cpp
+源码地址：`/frameworks/base/cmds/app_process/app_main.cpp`
 
-发现了，rovo89针对了一下几个地方进行了修改。
+发现了，rovo89 针对了一下几个地方进行了修改。
 
 **atrace_set_tracing_enabled 进行了替换修改**
 
 ![](xposed源码分析/2020-02-12-01-23-35.png)
 
-**onVmCreated 增加了Xposed的回调**
+**onVmCreated 增加了 Xposed 的回调**
 
 ![](xposed源码分析/2020-02-12-01-24-05.png)
 
-**main函数中，增加了 xposed 的 options 操作**
+**main 函数中，增加了 xposed 的 options 操作**
 
 ![](xposed源码分析/2020-02-12-01-24-34.png)
 
-我们在xposed.cpp中，能够看到其handleOptions的具体逻辑，其实就是处理一些xposed的特殊命令而已。
-如下所示：
-```
+我们在 `xposed.cpp` 中，能够看到其 handleOptions 的具体逻辑，其实就是处理一些 xposed 的特殊命令而已。如下所示：
+```cpp
 /** Handle special command line options. */
 bool handleOptions(int argc, char* const argv[]) {
     parseXposedProp();
@@ -273,12 +276,12 @@ bool handleOptions(int argc, char* const argv[]) {
 }
 ```
 
-main函数中，启动的时候增加了启动一些逻辑.
+main 函数中，启动的时候增加了启动一些逻辑.
 
 ![](xposed源码分析/2020-02-12-01-25-24.png)
 
-具体的， 我们可以看到。runtime.start那一段。做出了一个启动。
-```
+具体的， 我们可以看到。`runtime.start` 那一段。做出了一个启动。
+```cpp
     isXposedLoaded = xposed::initialize(zygote, startSystemServer, className, argc, argv);
     if (zygote) {
         // 当xposed成功启动的时候，start XPOSED_CLASS_DOTS_ZYGOTE这个类
@@ -300,21 +303,22 @@ main函数中，启动的时候增加了启动一些逻辑.
     }
 ```
 
-这里的我们看到，在main函数中启动了逻辑，
+这里的我们看到，在 main 函数中启动了逻辑，
 ```
 runtime.start(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : "com.android.internal.os.ZygoteInit",
                 startSystemServer ? "start-system-server" : "");
 ```
 
-其中，XPOSED_CLASS_DOTS_ZYGOTE 变量在，xposed.h头文件中有定义，如下所示：
-```
+其中， XPOSED_CLASS_DOTS_ZYGOTE 变量在，`xposed.h` 头文件中有定义，如下所示：
+```cpp
 #define XPOSED_CLASS_DOTS_ZYGOTE "de.robv.android.xposed.XposedBridge"
 ```
-发现，其实这个类就是我们之前向私有目录防止的XposedBridge项目的包名。
+其实这个类就是我们之前向私有目录防止的 XposedBridge 项目的包名。
 
-而runtime.start这个包名有什么作用呢？我们在AndroidRuntime中找到start方法的具体逻辑
-在源代码中/frameworks/base/core/jni/AndroidRuntime.cpp中看到
-```
+而 `runtime.start` 这个包名有什么作用呢？我们在 AndroidRuntime 中找到 start 方法的具体逻辑。
+
+在源代码中`/frameworks/base/core/jni/AndroidRuntime.cpp`中看到
+```cpp
 /*
  * Start the Android runtime.  This involves starting the virtual machine
  * and calling the "static void main(String[] args)" method in the class
@@ -326,11 +330,11 @@ runtime.start(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : "com.android.internal.
 void AndroidRuntime::start(const char* className, const char* options)
 ```
 
-系统源码对start方法的定义，就是启动对应类的 start void main入口函数。这里，就将三个项目的逻辑连接起来了。
+系统源码对 start 方法的定义，就是启动对应类的 start void main 入口函数。这里，就将三个项目的逻辑连接起来了。
 
 ## XposedBridge.java
-我们在XposedBridge.java代码中，看到其main方法，如下所示：
-```
+我们在 `XposedBridge.java` 代码中，看到其 main 方法，如下所示：
+```java
     /**
      * Called when native methods and other things are initialized, but before preloading classes etc.
      */
@@ -366,24 +370,24 @@ void AndroidRuntime::start(const char* className, const char* options)
             RuntimeInit.main(args);
     }
 ```
-ok，那么，整个app_process的复制hook逻辑，到这里我们已经清楚了。逻辑如下图所示。
+那么，整个 app_process 的复制 hook 逻辑，到这里我们已经清楚了。逻辑如下图所示。
 
 ![](xposed源码分析/2020-02-12-01-27-01.png)
 
-那么，xposed具体怎么实现系统api逻辑的replace和inject我们下次在做分析。
+那么，xposed 具体怎么实现系统 api 逻辑的 replace 和 inject 我们下次在做分析。
 
 # Xposed源码剖析——Xposed初始化
 
-之前我们看过了app_main.cpp源码，知道了在其中，启动了XposedBridge.jar方法。那么，其中还做了些什么事情呢？
+之前我们看过了 `app_main.cpp` 源码，知道了在其中，启动了 `XposedBridge.jar` 方法。那么，其中还做了些什么事情呢？
 
-之前我们也看到了在app_main.cpp还有几处新增的逻辑。xposed::initialize和onVmCreated回调。下面我在仔细的阅读以下源码。
+之前我们也看到了在 `app_main.cpp` 还有几处新增的逻辑。xposed::initialize和onVmCreated回调。下面我在仔细的阅读以下源码。
 
 ## xposed::initialize初始化
 
 ![](xposed源码分析/2020-02-12-01-28-24.png)
 
-对于xposed::initalize的初始化工作，我们能够在xposed.cpp中看到其具体的逻辑实现。
-```
+对于 `xposed::initalize` 的初始化工作，我们能够在 `xposed.cpp` 中看到其具体的逻辑实现。
+```cpp
 /** 
  * 初始化xposed
  */
@@ -445,7 +449,7 @@ bool initialize(bool zygote, bool startSystemServer, const char* className, int 
 ![](xposed源码分析/2020-02-12-01-29-28.png)
 
 其具体的逻辑如下所示：
-```
+```cpp
 /**   
   * 向当前的runtime中载入libxposed_*.so 
   */
@@ -490,8 +494,8 @@ void onVmCreated(JNIEnv* env) {
 }
 ```
 
-## libxposed_dalvik.cpp hook环境初始化
-```
+## `libxposed_dalvik.cpp` hook 环境初始化
+```cpp
 /** Called by Xposed's app_process replacement. 
   * 在被替换后的app_process中调用
   */
@@ -555,9 +559,9 @@ void onVmCreated(JNIEnv* env) {
 
 ## JNI方法注册逻辑
 
-这里注册的几个方法都是，Xposed核心的几个方法函数。
+这里注册的几个方法都是，Xposed 核心的几个方法函数。
 
-```
+```cpp
 int register_natives_XposedBridge(JNIEnv* env, jclass clazz) {
     const JNINativeMethod methods[] = {
 
@@ -583,21 +587,22 @@ int register_natives_XposedBridge(JNIEnv* env, jclass clazz) {
     return env->RegisterNatives(clazz, methods, NELEM(methods));
 }
 ```
-我们看到RegisterNatives这个方法的时候不是很理解，这里做一个简介。
+我们看到 RegisterNatives 这个方法的时候不是很理解，这里做一个简介。
 
-以前在jni中写本地方法时，都会写成 Java_com_example_hellojni_HelloJni_stringFromJNI的形式，函数名很长，而且当类名变了的时候，函数名必须一个一个的改，麻烦。
-现在好了有了RegisterNatives，可以简化我们的书写
-和传统方法相比，使用RegisterNatives的好处有三点：
-1. C＋＋中函数命名自由，不必像javah自动生成的函数声明那样，拘泥特定的命名方式；
-2. 效率高。传统方式下，Java类call本地函数时，通常是依靠VM去动态寻找.so中的本地函数(因此它们才需要特定规则的命名格式)，而使用RegisterNatives将本地函数向VM进行登记，可以让其更有效率的找到函数；
-3. 运行时动态调整本地函数与Java函数值之间的映射关系，只需要多次call RegisterNatives()方法，并传入不同的映射表参数即可。
+以前在 jni 中写本地方法时，都会写成 `Java_com_example_hellojni_HelloJni_stringFromJNI` 的形式，函数名很长，而且当类名变了的时候，函数名必须一个一个的改，麻烦。
 
-# Xposed源码剖析——hook具体实现
+现在好了有了 RegisterNatives ，可以简化我们的书写
+和传统方法相比，使用 RegisterNative s的好处有三点：
+1. C＋＋中函数命名自由，不必像 javah 自动生成的函数声明那样，拘泥特定的命名方式；
+2. 效率高。传统方式下，Java 类 call 本地函数时，通常是依靠 VM 去动态寻找 `.so` 中的本地函数(因此它们才需要特定规则的命名格式)，而使用 RegisterNatives 将本地函数向 VM 进行登记，可以让其更有效率的找到函数；
+3. 运行时动态调整本地函数与 Java 函数值之间的映射关系，只需要多次 call  `RegisterNatives()` 方法，并传入不同的映射表参数即可。
 
-之前我们看到了xposed各种初始化的工作，其实都是完成了针对系统中各种method的hook和替换工作。
+# Xposed 源码剖析—— hook 具体实现
 
-那么具体如何替换，其实都是调用了其中的。XposedBridge_hookMethodNative函数。这里，我们详细的看看XposedBridge_hookMethodNative函数中，做了一些什么操作。
-```
+之前我们看到了 xposed 各种初始化的工作，其实都是完成了针对系统中各种 method 的 hook 和替换工作。
+
+那么具体如何替换，其实都是调用了其中的。 XposedBridge_hookMethodNative 函数。这里，我们详细的看看 XposedBridge_hookMethodNative 函数中，做了一些什么操作。
+```cpp
 /**
   *
   * 将输入的Class中的Method方法的nativeFunc替换为xposedCallHandler 
@@ -654,14 +659,14 @@ void XposedBridge_hookMethodNative(JNIEnv* env, jclass clazz, jobject reflectedM
     }
 }
 ```
-对vm不熟悉的，解释一下几个不怎么常用的函数。
+对 vm 不熟悉的，解释一下几个不怎么常用的函数。
 
 | 名称                 | 说明                                    |
 | -------------------- | --------------------------------------- |
-| dvmDecodeIndirectRef | 将间接引用jobject转换为对象引用Object*  |
-| dvmSlotToMethod      | 根据偏移量，从ClassLoader中获取函数指针 |
+| dvmDecodeIndirectRef | 将间接引用 jobject 转换为对象引用 Object*  |
+| dvmSlotToMethod      | 根据偏移量，从 ClassLoader 中获取函数指针 |
 
-```
+```cpp
 /** 
   * hook方法调用时的回调
   */

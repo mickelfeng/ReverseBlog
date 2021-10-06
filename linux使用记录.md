@@ -16,7 +16,7 @@ category: linux
     - [临时设置](#%E4%B8%B4%E6%97%B6%E8%AE%BE%E7%BD%AE)
     - [当前用户的全局设置](#%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE)
     - [所有用户的全局设置](#%E6%89%80%E6%9C%89%E7%94%A8%E6%88%B7%E7%9A%84%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE)
-- [adb devices 报错 no permissions user in plugdev group; are your udev rules wrong?; see [http://developer.android.com/tools/device.html]](#adb-devices-%E6%8A%A5%E9%94%99-no-permissions-user-in-plugdev-group-are-your-udev-rules-wrong-see-httpdeveloperandroidcomtoolsdevicehtml)
+- [adb devices 报错 no permissions user in plugdev group; are your udev rules wrong?](#adb-devices-%E6%8A%A5%E9%94%99-no-permissions-user-in-plugdev-group-are-your-udev-rules-wrong)
     - [lsusb 找到你手机的usb地址](#lsusb-%E6%89%BE%E5%88%B0%E4%BD%A0%E6%89%8B%E6%9C%BA%E7%9A%84usb%E5%9C%B0%E5%9D%80)
     - [修改/etc/udev/rules.d/51-android.rules文件](#%E4%BF%AE%E6%94%B9etcudevrulesd51-androidrules%E6%96%87%E4%BB%B6)
     - [执行下列命令](#%E6%89%A7%E8%A1%8C%E4%B8%8B%E5%88%97%E5%91%BD%E4%BB%A4)
@@ -35,6 +35,11 @@ category: linux
 - [vmware装的ubuntu 18.04,后安装vm tools复制粘贴失效解决办法。](#vmware%E8%A3%85%E7%9A%84ubuntu-1804%E5%90%8E%E5%AE%89%E8%A3%85vm-tools%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4%E5%A4%B1%E6%95%88%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95)
 - [试用 010Editor 、 Beyond Compare 4 、Source Insight4.0](#%E8%AF%95%E7%94%A8-010editor--beyond-compare-4-source-insight40)
 - [安装 Gradle](#%E5%AE%89%E8%A3%85-gradle)
+- [安装 docker](#%E5%AE%89%E8%A3%85-docker)
+    - [卸载旧版本](#%E5%8D%B8%E8%BD%BD%E6%97%A7%E7%89%88%E6%9C%AC)
+    - [使用 APT 安装](#%E4%BD%BF%E7%94%A8-apt-%E5%AE%89%E8%A3%85)
+    - [使用脚本自动安装](#%E4%BD%BF%E7%94%A8%E8%84%9A%E6%9C%AC%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85)
+- [neofetch](#neofetch)
 - [其他](#%E5%85%B6%E4%BB%96)
 
 <!-- /TOC -->
@@ -135,7 +140,7 @@ export LD_LIBRARY_PATH=/home/public/software_install/protobuf-3.1.0/lib:$LD_LIBR
 
 配置好后可以使用`echo $PATH`或`env`测试当前的环境变量。
 
-# 6. adb devices 报错 no permissions (user in plugdev group; are your udev rules wrong?); see [http://developer.android.com/tools/device.html]
+# 6. adb devices 报错 no permissions (user in plugdev group; are your udev rules wrong?) 
 
 ## 6.1. lsusb 找到你手机的usb地址
 ```
@@ -492,6 +497,117 @@ sudo unzip -d /opt/gradle gradle-7.0.1-bin.zip
 
 export PATH=$PATH:/opt/gradle/gradle-7.0.1/bin
 ```
+
+# 17. 安装 docker
+## 卸载旧版本
+```bash
+$ sudo apt-get remove docker \
+               docker-engine \
+               docker.io
+```
+## 使用 APT 安装
+首先需要添加使用 HTTPS 传输的软件包以及 CA 证书。
+```bash
+$ sudo apt-get update
+
+# 添加使用 HTTPS 传输的软件包以及 CA 证书。
+$ sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+```
+需要添加软件源的 GPG 密钥。
+```bash
+# 鉴于国内网络问题，强烈建议使用国内源
+$ curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# 官方源
+# $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+```
+
+向 `sources.list` 中添加 Docker 软件源。
+```bash
+$ echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+
+# 官方源
+# $ echo \
+#   "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+#   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+> 以上命令会添加稳定版本的 Docker APT 镜像源，如果需要测试版本的 Docker 请将 stable 改为 test。
+
+更新 apt 软件包缓存，并安装 docker-ce 。
+```bash
+$ sudo apt-get update
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+## 使用脚本自动安装
+可以通过 `--mirror` 选项使用国内源进行安装
+```bash
+# $ curl -fsSL test.docker.com -o get-docker.sh
+$ curl -fsSL get.docker.com -o get-docker.sh
+$ sudo sh get-docker.sh --mirror Aliyun
+# $ sudo sh get-docker.sh --mirror AzureChinaCloud
+```
+
+启动 docker 。
+```bash
+$ sudo systemctl enable docker
+$ sudo systemctl start docker
+```
+
+建立 docker 用户组，并将当前用户加入 docker 组。
+```bash
+$ sudo groupadd docker
+$ sudo usermod -aG docker $USER
+```
+
+测试。
+```bash
+docker run --rm hello-world
+```
+
+镜像加速
+
+查看是否在 `docker.service` 文件中配置过镜像地址。
+```bash
+$ systemctl cat docker | grep '\-\-registry\-mirror'
+```
+如果该命令有输出，那么请执行 `$ systemctl cat docker` 查看 `ExecStart=` 出现的位置，修改对应的文件内容去掉 `--registry-mirror` 参数及其值，并按接下来的步骤进行配置。
+
+如果以上命令没有任何输出，那么就可以在 `/etc/docker/daemon.json` 中写入如下内容（如果文件不存在请新建该文件）。
+```json
+{
+  "registry-mirrors": [
+    "https://hub-mirror.c.163.com",
+    "https://mirror.baidubce.com"
+  ]
+}
+```
+之后重新启动服务。
+```bash
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+```
+
+> 参考： https://yeasy.gitbook.io/docker_practice/install/ubuntu
+
+# neofetch
+Neofetch 是一个命令行系统信息工具。
+
+安装和使用
+```bash
+$ sudo apt-get update
+$ sudo apt-get install neofetch
+$ neofetch
+```
+> 参考：https://github.com/dylanaraps/neofetch
 
 # 其他
 

@@ -598,7 +598,7 @@ $ sudo systemctl restart docker
 
 > 参考： https://yeasy.gitbook.io/docker_practice/install/ubuntu
 
-# neofetch
+# 18. neofetch
 Neofetch 是一个命令行系统信息工具。
 
 安装和使用
@@ -608,6 +608,16 @@ $ sudo apt-get install neofetch
 $ neofetch
 ```
 > 参考：https://github.com/dylanaraps/neofetch
+
+# 安装 Google 输入法
+```bash
+sudo apt-get install fcitx-googlepinyin
+```
+然后进入 language support 设置，安装完整支持，在 Keyboard input method system 选项中选择 fcitx，重启系统。
+
+最后打开输入法配置，添加 Google Pinyin 既可。
+
+
 
 # 其他
 

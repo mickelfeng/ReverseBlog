@@ -412,7 +412,108 @@ post_asset_folder: true
 参考[hexo引用本地图片无法显示](https://850552586.github.io/2018/11/15/hexo%E5%BC%95%E7%94%A8%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA/)
 
 
+# hexo 升级 
+由于最近安装了 NodeJS 14 导致无法使用旧版的 hexo，所以进行了一次升级，记录一下。
 
+## 升级
+Hexo 升级需要使用 `npm-check`、`npm-upgrade`、`npm-update` 按以下顺序逐步执行完成后，Hexo 版本及系统插件均会升级到最新。
+```bash
+//以下指令均在Hexo目录下操作，先定位到Hexo目录
+//查看当前版本，判断是否需要升级
+> hexo version
 
+//全局升级hexo-cli
+> npm i hexo-cli -g
 
+//再次查看版本，看hexo-cli是否升级成功
+> hexo version
 
+//安装npm-check，若已安装可以跳过
+> npm install -g npm-check
+
+//检查系统插件是否需要升级
+> npm-check
+
+//安装npm-upgrade，若已安装可以跳过
+> npm install -g npm-upgrade
+
+//更新package.json
+> npm-upgrade
+
+//更新全局插件
+> npm update -g
+
+//更新系统插件
+> npm update --save
+
+//再次查看版本，判断是否升级成功
+> hexo version
+```
+
+## 调整配置
+升级后别急着 `hexo g`，需要先调整站点配置文件 `hexo/_config.yml`，否则会报错。
+
+以下是废弃的字段，需要重新配置
+```bash
+# Deprecated
+external_link: true|false
+# New option
+external_link:
+  enable: true # Open external links in new tab
+  field: site # Apply to the whole site
+  exclude: ''
+
+# Deprecated
+use_date_for_updated: true
+# New option
+## pdated_option supports 'mtime', 'date', 'empty'
+updated_option: 'mtime'
+```
+其他字段可以看官方文档，我这里不关心就不设置了。
+
+## NexT-8.x 跨版本升级
+升级完 hexo 为 5.4 以后， next 主题也需要进行升级。
+
+通过 npm 方式安装新版：
+```bash
+//定位到hexo目录,npm安装主题
+> npm install hexo-theme-next
+```
+将 Next 主题配置文件 `node_modules/hexo-theme-next/_config.yml` 改名为 `_config.next.yml`, 复制到根目录（与 Hexo 站点配置文件`_config.yml` 在同一目录），这个文件的作用等同于旧版 `next.yml`，但优先级最高。这样做的好处是以后可以通过 npm 顺滑升级 Next 版本，不用担心配置文件被覆盖。相关字段的解释可以通过[官方文档](https://theme-next.js.org/docs/getting-started/)查看，我这里主要说一下摘要设置和统计人数设置。
+
+> 参考：https://www.imczw.com/post/tech/hexo5-next8-updated.html
+## 设置摘要
+官方给的方法：
+1. 使用 `<!-- more -->` 插入你想设置摘要的文本位置之后，这个方法也是官方推荐的。
+1. 在文件头设置 `description` 字段,内容即为摘要。
+
+这两种方法都比较麻烦，我这里使用了第三方插件设置摘要。直接安装插件：
+```bash
+npm install hexo-excerpt --save
+```
+在 Hexo 站点配置文件`_config.yml` 添加下列字段
+```bash
+excerpt:
+  depth: 10 
+  excerpt_excludes: []
+  more_excludes: []
+  hideWholePostExcerpts: true
+```
+
+> 参考：https://github.com/chekun/hexo-excerpt
+
+## 统计人数设置
+
+统计人数可以直接通过设置 `_config.next.yml` 配置文件，将 `enable` 对应的值改为 `true` 即可。
+```Bash
+# Show Views / Visitors of the website / page with busuanzi.
+# For more information: http://ibruce.info/2015/04/04/busuanzi/
+busuanzi_count:
+  enable: true
+  total_visitors: true
+  total_visitors_icon: fa fa-user
+  total_views: true
+  total_views_icon: fa fa-eye
+  post_views: true
+  post_views_icon: far fa-eye
+```

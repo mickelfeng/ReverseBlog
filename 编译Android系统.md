@@ -245,7 +245,23 @@ LC_ALL=C 是为了去除所有本地化的设置，让命令能正确执行。
 
 ## 2. adb和fastboot都没有权限
 
-> 可以参考 https://github.com/snowdream/51-android
+> 可以参考 https://github.com/snowdream/51-android 或者 https://github.com/M0Rf30/android-udev-rules
+
+## 3. adb devices 无法工作。
+这是因为缺少 USB 驱动的原因，按照以下方法更新
+1. 打开设备管理器
+1. 查找未知的 Android 设备
+1. 更新驱动程序
+1. 浏览我的计算机以查找驱动程序软件
+1. 让我从设备列表中选择，选择列出所有设备
+1. 在 Android 设备 或 Google Inc 下，您会找到 Android Bootloader Interface
+1. 选择 Android Bootloader 界面 
+1. 当它说驱动程序可能不兼容时单击 是
+
+如果以上步骤 6 无法找到相应的设备，就需要安装对应的设备，参考网站 https://developer.android.com/studio/run/oem-usb#InstallingDriver 上的说明进行安装即可。
+
+> 参考： https://stackoverflow.com/questions/8588595/android-fastboot-devices-not-returning-device
+
 
 # 其他
 

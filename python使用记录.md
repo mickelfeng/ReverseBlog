@@ -7,6 +7,29 @@ category: python
 
 本文章记录使用pytho过程中易忘的知识，方便自己查阅。
 
+# 设置 pypi 镜像
+## 临时使用
+```bash
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
+```
+注意，simple 不能少, 是 https 而不是 http
+
+## 设为默认
+升级 pip 到最新的版本 (>=10.0.0) 后进行配置：
+```bash
+pip install pip -U
+
+# 清华源
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 或：
+# 阿里源
+pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+# 腾讯源
+pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple
+# 豆瓣源
+pip config set global.index-url http://pypi.douban.com/simple/
+```
 # Python中join函数和os.path.join用法
 > join ： 连接字符串数组。将字符串、元组、列表中的元素以指定的字符(分隔符)连接生成一个新的字符串
 

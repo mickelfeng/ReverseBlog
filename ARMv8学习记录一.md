@@ -23,7 +23,7 @@ category: ARMv8汇编
 由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。
 
 C 代码如下：
-```
+```c
 // hello.c
 #include<stdio.h>
 int main(int argc, char const *argv[]){
@@ -31,8 +31,9 @@ int main(int argc, char const *argv[]){
     return 0;
 }
 ```
-makefile 如下：
-```
+
+Makefile 内容如下：
+```makefile
 #文件名称
 MODALE_NAME=hello
 
@@ -130,9 +131,6 @@ run:
 
 run64:
 	adb shell /data/local/tmp/$(MODALE_NAME)64 
-
-
-
 ```
 使用 `make all64` 命令编译后的结果：
 
@@ -299,6 +297,8 @@ gef> gef missing
 根据提示可以发现缺少了 `keystone-engine` 模块，当然还有可能缺少其他模块。
 
 **后面的内容可以省略，安装过程中会出现比较多的问题，模块不安装也不影响使用。**
+
+--------
 
 ## 2.2. 安装模块
 退出 `gdb` , 下载 `[ez_setup.py](https://bootstrap.pypa.io/ez_setup.py)` ，运行列命令，进 行 `easy_install` 工具的安装：

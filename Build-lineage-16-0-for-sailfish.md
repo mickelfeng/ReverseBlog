@@ -87,7 +87,7 @@ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 chmod a+x ~/bin/repo
 ```
 
-将~/bin目录放在执行路径中，打开 `~/.profile` 文件，添加下列代码：
+将 `~/bin` 目录放在执行路径中，打开 `~/.profile` 文件，添加下列代码：
 ```
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
@@ -111,6 +111,16 @@ repo init -u https://github.com/LineageOS/android.git -b lineage-16.0
 
 repo sync
 ```
+
+# 3.4.1. 准备特定于设备的代码
+源代码下载后，确保您位于源代码的根目录 ( cd ~/android/lineage)，然后键入：
+```bash
+source build/envsetup.sh
+breakfast sailfish
+```
+这将下载您设备的[设备特定配置](https://github.com/LineageOS/android_device_google_sailfish)和 [内核](https://github.com/LineageOS/android_kernel_google_marlin)。
+
+如果出现错误，按下面的方法提取专有Blob，推荐使用 通过修改 `.repo/local_manifests/*.xml` 文件进行提取 。
 
 ## 3.5. 提取专有Blob
 ### 3.5.1. 通过 `extract_files.sh` 脚本提取

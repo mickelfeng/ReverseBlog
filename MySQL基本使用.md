@@ -82,7 +82,7 @@ select now(); #查看当前时间
 ## 数据库操作
 查看所有的数据库
 ```
-show datebases;
+show databases;
 ```
 
 使用数据库
@@ -97,9 +97,9 @@ select database();
 
 创建数据库
 ```
-create database 数据库名 charset=utf8;
+create database 数据库名 charset=utf8mb4;
 例如：
-create database test01 charset=utf8;
+create database test01 charset=utf8mb4;
 ```
 
 查看创建数据库
@@ -932,7 +932,7 @@ from pymysql import *
 
 def insert():
     # 创建 Connection 连接
-    conn = connect(host="localhost", port=3306, database="jing_dong", user="ckcat", password="mysql", charset="utf8")
+    conn = connect(host="localhost", port=3306, database="jing_dong", user="ckcat", password="mysql", charset="utf8mb4")
     # 获得 Cursor 对象
     cs = conn.cursor()
 
@@ -985,8 +985,6 @@ show profiles;
 建立索引会占用磁盘空间
 
 
-
-> 参考某培训机构笔记。
 
 
 

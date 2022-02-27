@@ -4,65 +4,29 @@ date: 2019-12-13 21:12:48
 tags: Django
 category: python
 ---
-<!-- TOC -->
 
-- [虚拟环境](#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83)
-    - [创建](#%E5%88%9B%E5%BB%BA)
-    - [退出](#%E9%80%80%E5%87%BA)
-    - [查看和使用](#%E6%9F%A5%E7%9C%8B%E5%92%8C%E4%BD%BF%E7%94%A8)
-    - [删除](#%E5%88%A0%E9%99%A4)
-    - [包操作](#%E5%8C%85%E6%93%8D%E4%BD%9C)
-    - [安装django包](#%E5%AE%89%E8%A3%85django%E5%8C%85)
-- [创建项目](#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE)
-    - [创建应用](#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8)
-    - [安装应用](#%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8)
-    - [开发服务器](#%E5%BC%80%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8)
-- [设计模型](#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B)
-    - [ORM框架](#orm%E6%A1%86%E6%9E%B6)
-    - [定义模型类](#%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E7%B1%BB)
-        - [设计图书类](#%E8%AE%BE%E8%AE%A1%E5%9B%BE%E4%B9%A6%E7%B1%BB)
-        - [模型类设计](#%E6%A8%A1%E5%9E%8B%E7%B1%BB%E8%AE%BE%E8%AE%A1)
-    - [迁移](#%E8%BF%81%E7%A7%BB)
-        - [设计英雄类](#%E8%AE%BE%E8%AE%A1%E8%8B%B1%E9%9B%84%E7%B1%BB)
-    - [数据操作](#%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C)
-        - [对象关联操作](#%E5%AF%B9%E8%B1%A1%E5%85%B3%E8%81%94%E6%93%8D%E4%BD%9C)
-- [后台管理](#%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86)
-    - [管理页面本地化](#%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E6%9C%AC%E5%9C%B0%E5%8C%96)
-    - [创建管理员](#%E5%88%9B%E5%BB%BA%E7%AE%A1%E7%90%86%E5%91%98)
-    - [注册模型类](#%E6%B3%A8%E5%86%8C%E6%A8%A1%E5%9E%8B%E7%B1%BB)
-    - [自定义管理页面](#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2)
-- [视图以及URL](#%E8%A7%86%E5%9B%BE%E4%BB%A5%E5%8F%8Aurl)
-    - [定义视图](#%E5%AE%9A%E4%B9%89%E8%A7%86%E5%9B%BE)
-    - [配置URLconf](#%E9%85%8D%E7%BD%AEurlconf)
-        - [查找视图的过程](#%E6%9F%A5%E6%89%BE%E8%A7%86%E5%9B%BE%E7%9A%84%E8%BF%87%E7%A8%8B)
-    - [请求访问](#%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AE)
-- [模板](#%E6%A8%A1%E6%9D%BF)
-    - [创建模板](#%E5%88%9B%E5%BB%BA%E6%A8%A1%E6%9D%BF)
-    - [自定义模板](#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF)
-    - [视图调用模板](#%E8%A7%86%E5%9B%BE%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF)
-    - [视图调用模板简写](#%E8%A7%86%E5%9B%BE%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF%E7%AE%80%E5%86%99)
-
-<!-- /TOC -->
 # 1. 虚拟环境
-虚拟环境其实就是对真实python环境的复制，这样我们在复制的python环境中安装包就不会影响到真实的python环境，在不同的虚拟环境中开发项目就实现了项目之间的隔离。
+虚拟环境其实就是对真实 python 环境的复制，这样我们在复制的 python 环境中安装包就不会影响到真实的 python 环境，在不同的虚拟环境中开发项目就实现了项目之间的隔离。
 
 ## 1.1. 创建
 首先安装虚拟环境，命令如下:
-```
+```bash
 sudo pip3 install virtualenv
 ```
 接下来还要安装虚拟环境扩展包，命令如下：
 ```
 sudo pip3 install virtualenvwrapper
-```
+```bash
 安装虚拟环境包装器的目的是使用更加简单的命令来管理虚拟环境。
 
 修改home目录下的配置文件 `.bashrc` ，添加如下内容：
-```
+```bash
 export WORKEON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
 ```
+
 这里运行可能会出现 `/usr/bin/python: No module named virtualenvwrapper` 错误，修改 `/usr/local/bin/virtualenvwrapper.sh` 如下即可：
+
 ![](Django学习-入门/2019-12-13-21-35-50.png)
 
 使用 `source .bashrc` 命令使配置文件生效。
@@ -571,8 +535,89 @@ def index(request):
 > 对应的[代码地址](https://github.com/CKCat/Note/tree/master/Python/Django/test01)
 
 
+# 总结
+
+1. 安装 Django，可以指定版本安装。
+```bash
+python -m pip install Django==3.2.11
+```
+
+2. 创建项目和应用，一个项目可以创建多个应用。
+```bash
+# 创建项目
+django-admin startproject mysite 
+# 创建应用
+python manage.py startapp polls
+```
+
+3. URLconf
+函数 include() 允许引用其它 URLconfs。每当 Django 遇到 include() 时，它会截断与此项匹配的 URL 的部分，并将剩余的字符串发送到 URLconf 以供进一步处理。
+
+函数 path() 具有四个参数，两个必须参数：route 和 view，两个可选参数：kwargs 和 name。
+- route: 是一个匹配 URL 的准则（类似正则表达式）。当 Django 响应一个请求时，它会从 urlpatterns 的第一项开始，按顺序依次匹配列表中的项，直到找到匹配的项。
+- view: 当 Django 找到了一个匹配的准则，就会调用这个特定的视图函数，并传入一个 HttpRequest 对象作为第一个参数，被“捕获”的参数以关键字参数的形式传入。
+- kwargs: 任意个关键字参数可以作为一个字典传递给目标视图函数。
+- name: 为你的 URL 取名能使你在 Django 的任意地方唯一地引用它，尤其是在模板中。
+
+4. 数据库配置：
+ENGINE -- 可选值有 'django.db.backends.sqlite3'，'django.db.backends.postgresql'，'django.db.backends.mysql'，或 'django.db.backends.oracle'等。
+
+NAME -- 数据库的名称。
+
+> 除了 SQLite 以外，使用其他数据库之前必须先创建好数据库。
+
+创建数据表。
+```bash
+python manage.py migrate polls
+```
+迁移。
+```bash
+python manage.py makemigrations
+```
+查看迁移对应的 SQL 语句。
+```bash
+python manage.py sqlmigrate polls 0001
+```
+
+5. 创建管理员账号
+```bash
+python manage.py createsuperuser
+```
+
+6. 模板
+项目的 TEMPLATES 配置项描述了 Django 如何载入和渲染模板。默认的设置文件设置了 DjangoTemplates 后端，并将 APP_DIRS 设置成了 True。这一选项将会让 DjangoTemplates 在每个 INSTALLED_APPS 文件夹中寻找 "templates" 子目录。
+
+我们需要帮助 Django 选择正确的模板，最好的方法就是把他们放入各自的 命名空间 中，也就是把这些模板放入一个和 自身 应用重名的子文件夹里。
+
+7. 去除硬编码URL
+可以使用 `{% url 'name' args %}` 标签去除硬编码 URL，其中 name 为 `url()` 函数中 name 参数定义的字符串。
+
+8. 通用视图 ListView 和 DetailView 
+DetailView 期望从 URL 中捕获名为 "pk" 的主键值。
+
+默认情况下，通用视图 DetailView 使用一个叫做 `<app name>/<model name>_detail.html` ListView 使用一个叫做 `<app name>/<model name>_list.html` 的默认模板；可以通过修改 template_name 的值改变默认的模板。
+
+默认情况下， DetailView 和 ListView 会根据 model 属性自动提供 context 变量，默认名称为模型的小写，可以通过修改 context_object_name 属性改变默认值。
+
+9. 自动测试
+根据被测试文件或类名，创建对应的测试文件，编写测试类继承 `django.test.TestCase`，编写测试代码。
+
+测试试图还需要导入 `django.test.Client` 类，该类可以模拟用户和视图层代码的交互。
+
+更深入的测试可以使用 Selenium 工具。
 
 
+10. 静态文件
+Django 的 STATICFILES_FINDERS 设置包含了一系列的查找器，它们知道去哪里找到 static 文件。AppDirectoriesFinder 是默认查找器中的一个，它会在每个 INSTALLED_APPS 中指定的应用的子文件中寻找名称为 static 的特定文件夹。管理后台采用相同的目录结构管理它的静态文件。
 
+我们需要指引 Django 选择正确的静态文件，而最好的方式就是把它们放入各自的 命名空间 。
 
+我们需要再 html 文件开头添加 `{% load static %}` 才可以使用 `{% static %}` 模板标签，该标签会生成静态文件的绝对路径。
 
+`{% static %}` 模板标签在静态文件（例如样式表）中是不可用的。
+
+11. 自定义后台界面和风格
+
+在项目根目录新建一个文件夹 `templates/admin`，并将存放 Django 默认模板的目录（`django/contrib/admin/templates`）内的模板文件 `admin/base_site.html` 复制到这个目录内。可以使用 ` python -c "import django; print(django.__path__)"` 查看 Django 的安装目录。
+
+修改 `setting.py` 中 TEMPLATES 选项中 DIRS 字段为 `BASE_DIR / 'templates'`。最后修改 `admin/base_site.html` 文件中的内容。

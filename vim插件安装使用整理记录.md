@@ -130,3 +130,78 @@ noremap <F3> :Autoformat<CR>
 pip install --upgrade autopep8
 ```
 按F3开启自动格式化。
+
+# 使用 LSP 插件
+
+## 安装 vim-plug
+```bash
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+```
+如果由于网络问题，无法访问 https://raw.githubusercontent.com ，可以手动安装。
+
+1. 下载 `plug.vim` 。
+2. 将 `plug.vim` 移动到 `~/.vim/autoload/plug.vim` 。
+
+安装成功后修改 `~/.vimrc` 声明插件安装，然后进入 VIM 中运行 `:PlugInstall` 命令安装插件。
+
+```bash
+" Plugins will be downloaded under the specified directory.
+call plug#begin('~/.vim/plugged')
+
+" 声明需要安装的插件
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'piec/vim-lsp-clangd'
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
+```
+更多信息参考：https://github.com/junegunn/vim-plug
+
+
+## 安装 vim-lsp
+安装 vim-lsp 插件比较简单，上面安装 vim-plug 插件中已经安装好了。
+
+这里主要讲一下注册服务。
+
+例如：注册 python 服务。
+
+首先安装 `python-language-server`。
+```bash
+pip install python-language-server
+```
+
+然后在 `~/.vimrc` 中，添加下列内容。
+```bash
+if executable('pyls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+```
+更详细的信息参考： https://github.com/prabirshrestha/vim-lsp/wiki/Servers-Python 。
+
+例如：安装 Clangd - C/C++ 。
+
+首先安装 llvm。
+
+然后将下面内容添加到 中。
+```bash
+if executable('clangd')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'clangd',
+        \ 'cmd': {server_info->['clangd', '-background-index']},
+        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+        \ })
+endif
+```
+最后安装 `piec/vim-lsp-clangd` 插件。
+
+![效果图](vim插件安装使用整理记录/2021-11-23-20-09-17.png)
+
+更多信息请参考：https://github.com/prabirshrestha/vim-lsp/wiki 。

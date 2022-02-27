@@ -52,19 +52,20 @@ linux中启动模拟器出现grant current user access to /dev/kvm错误
 
 * 临时解决方法：
   
-  打开terminal 输入代码 `sudo chown username -R /dev/kvm` 注意username是你用的用户名， 重新启动模拟器就可以了。
+打开terminal 输入代码 `sudo chown username -R /dev/kvm` 注意username是你用的用户名， 重新启动模拟器就可以了。
 
 * 永久解决办法：
-  ```
-  安装qemu-kvm
-  sudo apt install qemu-kvm
 
-  使用以下命令将您的用户添加到kvm组：
-  sudo adduser $USER kvm
+```
+安装qemu-kvm
+sudo apt install qemu-kvm
 
-  如果仍然显示拒绝权限：
-  sudo chown $USER /dev/kvm
-  ```
+使用以下命令将您的用户添加到kvm组：
+sudo adduser $USER kvm
+
+如果仍然显示拒绝权限：
+sudo chown $USER /dev/kvm
+```
 
 
 # 2. Android studio 创建快捷方式
@@ -141,6 +142,10 @@ export LD_LIBRARY_PATH=/home/public/software_install/protobuf-3.1.0/lib:$LD_LIBR
 配置好后可以使用`echo $PATH`或`env`测试当前的环境变量。
 
 # 6. adb devices 报错 no permissions (user in plugdev group; are your udev rules wrong?) 
+
+参考仓库：https://github.com/snowdream/51-android 或 https://github.com/M0Rf30/android-udev-rules
+
+如果还是不行的话再参考下列方法。
 
 ## 6.1. lsusb 找到你手机的usb地址
 ```
